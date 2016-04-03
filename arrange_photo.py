@@ -32,15 +32,19 @@ def getOriginalDate(filename):
     return time.strftime("%Y.%m", time.localtime(state[-2]))  
   
    
-def classifyPictures(path):  
+def classifyPictures(path):
+    
     for root,dirs,files in os.walk(path,True):  
         dirs[:] = []  
-        for filename in files:  
-            filename = os.path.join(root, filename)  
+        for filename in files:
+            only_name = filename
+            filename = os.path.join(root, filename)
+            print(only_name)
             f,e = os.path.splitext(filename)  
-            if e.lower() not in ('.jpg','.png','.mp4'):  
+            if e.lower() not in ('.jpg','.png','.mp4','.3gp'):  
                 continue  
-            info = "文件名: " + filename + " "  
+            info = "文件名: " + filename + " "
+            #print(info)
             t=""  
             try:  
                 t = getOriginalDate( filename )  
@@ -48,14 +52,16 @@ def classifyPictures(path):
                 print e  
                 continue  
             info = info + "拍摄时间：" + t + " "  
-            pwd = root +'\\'+ t  
-            dst = pwd + '\\' + filename  
+            pwd = root +os.sep+ t  
+            dst = pwd + os.sep + only_name  
             if not os.path.exists(pwd ):  
                 os.mkdir(pwd)  
-            print info, dst  
+            #print (info, dst)
+            print("file name is :%s" % (filename))
+            print("Destination folder is: %s" % (dst))
             shutil.copy2( filename, dst )  
             os.remove( filename )  
    
 if __name__ == "__main__":  
-    path = "."  
+    path = "/home/wjc/Project/arrange_photo"  
     classifyPictures(path)  
